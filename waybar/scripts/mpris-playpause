@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Play/pause toggle glyph for the miniplayer. Shows the action that a click will
+# perform: pause icon while playing, play icon while paused. Empty (hidden) when
+# no player is present.
+
+case "$(playerctl status 2>/dev/null)" in
+  Playing) echo "󰏤" ;;
+  Paused)  echo "󰐊" ;;
+  *)       exit 0 ;;
+esac

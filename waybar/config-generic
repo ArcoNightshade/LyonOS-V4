@@ -1,0 +1,60 @@
+{
+  "modules-left": [
+    "group/leftside"
+  ],
+  "group/leftside": {
+    "orientation": "horizontal",
+    "modules": [
+      "group/miniplayer"
+    ]
+  },
+  "group/miniplayer": {
+    "orientation": "horizontal",
+    "modules": [
+      "image#albumart",
+      "mpris#suffix"
+    ]
+  },
+  "image#albumart": {
+    "exec": "~/.config/waybar/scripts/mpris-albumart",
+    "size": 32,
+    "interval": 2,
+    "on-click": "playerctl play-pause",
+    "tooltip": false
+  },
+  "modules-center": [
+    "clock#centered"
+  ],
+  "modules-right": [
+    "group/rightside"
+  ],
+  "group/rightside": {
+    "orientation": "horizontal",
+    "modules": [
+      "network#statusprefix",
+      "group/network",
+      "custom/cpuprefix",
+      "cpu",
+      "custom/memoryprefix",
+      "memory",
+      "battery#bat0prefix",
+      "battery#bat0suffix",
+      "battery#bat1prefix",
+      "battery#bat1suffix",
+      "group/traygroup#generic"
+    ]
+  },
+  "group/traygroup#generic": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/cc",
+      "pulseaudio#prefix",
+      "tray"
+    ]
+  },
+  "layer": "top",
+  "include": [
+    "~/.config/waybar/config-common"
+  ],
+  "_vim_": "# vim: set filetype=json:"
+}

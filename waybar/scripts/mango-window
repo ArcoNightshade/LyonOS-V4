@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# mango-window -- focused-window title for Waybar under Mango (mangowc).
+#
+# The niri config used niri/window in modules-center; Mango has no such native
+# Waybar module, so this feeds a `custom/mangowindow` module from Mango's IPC
+# (`mmsg watch focusing-client`), emitting one Waybar JSON line per focus
+# change. `title`/`appid` arrive already JSON-escaped from mmsg, so they are
+# re-emitted verbatim; set `"escape": true` on the module so Waybar treats the
+# title as literal text (not Pango markup). When no window is focused mmsg
+# reports "title":null and the label goes blank.
+
+mmsg watch focusing-client | while IFS= read -r line; do
+  if [[ $line == *'"title":null'* ]]; then
+    printf '{"text":"","tooltip":""}\n'
+    continue
+  fi
+  title=${line#*\"title\":\"}; title=${title%%\",\"appid\"*}
+  appid=${line#*\"appid\":\"}; appid=${appid%%\"*}
+  printf '{"text":"%s","tooltip":"%s"}\n' "$title" "$appid"
+done

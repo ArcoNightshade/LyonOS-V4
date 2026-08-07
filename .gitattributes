@@ -1,0 +1,6 @@
+*.css -linguist-detectable
+*.html -linguist-detectable
+*.sh -linguist-detectable
+*.qml -linguist-detectable
+*.js -linguist-detectable
+*.py -linguist-detectable

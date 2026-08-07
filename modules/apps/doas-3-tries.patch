@@ -1,0 +1,18 @@
+--- a/pam.c
++++ b/pam.c
+@@ -286,8 +286,13 @@
+ 		snprintf(doas_prompt, sizeof(doas_prompt),
+ 		    "\rdoas (%.32s@%.32s) password: ", myname, host);
+ 
+-		/* authenticate */
+-		ret = pam_authenticate(pamh, 0);
++		/* authenticate: allow up to 3 attempts before aborting */
++		int auth_tries;
++		for (auth_tries = 0; auth_tries < 3; auth_tries++) {
++			ret = pam_authenticate(pamh, 0);
++			if (ret == PAM_SUCCESS)
++				break;
++		}
+ 		if (ret != PAM_SUCCESS) {
+ 			pamcleanup(ret, sess, cred);
+ 			syslog(LOG_AUTHPRIV | LOG_NOTICE, "failed auth for %s", myname);

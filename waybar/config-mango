@@ -1,0 +1,46 @@
+{
+  "modules-left": [
+    "group/leftside"
+  ],
+  "modules-center": [
+    "custom/mangowindow"
+  ],
+  "layer": "top",
+  "include": [
+    "~/.config/waybar/config-common",
+    "~/.config/waybar/config-common-tiling"
+  ],
+  "custom/mangowindow": {
+    "exec": "~/.config/waybar/scripts/mango-window",
+    "return-type": "json",
+    "format": " {} ",
+    "escape": true,
+    "restart-interval": 1
+  },
+  "custom/mangotags": {
+    "exec": "~/.config/waybar/scripts/mango-tags",
+    "return-type": "json",
+    "tooltip": false,
+    "restart-interval": 1,
+    "on-scroll-up": "mmsg dispatch viewtoleft_have_client",
+    "on-scroll-down": "mmsg dispatch viewtoright_have_client",
+    "on-click": "mmsg dispatch toggleoverview"
+  },
+  "group/leftside": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/mangotags",
+      "image#albumart",
+      "mpris#prefix",
+      "mpris#suffix"
+    ]
+  },
+  "image#albumart": {
+    "exec": "~/.config/waybar/scripts/mpris-albumart",
+    "size": 32,
+    "interval": 2,
+    "on-click": "playerctl play-pause",
+    "tooltip": false
+  },
+  "_vim_": "# vim: set filetype=json:"
+}

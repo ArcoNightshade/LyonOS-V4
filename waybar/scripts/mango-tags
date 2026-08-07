@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# mango-tags -- Waybar tag indicator for the Mango (mangowc) compositor.
+#
+# Mango does not implement the dwl-ipc Wayland protocol that Waybar's native
+# `dwl/tags` module needs, so this drives a `custom/mangotags` module from
+# Mango's own JSON IPC instead (`mmsg watch all-tags`). It emits one Waybar
+# JSON line per tag change: a single label of tag numbers 1-9 for the first
+# monitor, with the active tag emphasised, occupied tags shown normally and
+# empty tags dimmed. Pango markup uses single-quoted attributes so the label
+# stays valid JSON without extra escaping.
+#
+# This is the closest equivalent to niri/workspaces; per-tag clickable buttons
+# aren't possible from a single custom module (use on-scroll/on-click in the
+# module config for navigation).
+
+mmsg watch all-tags | while IFS= read -r line; do
+  # Keep only the first monitor's tag array: everything between the first
+  # "tags":[ and its closing ].
+  tags=${line#*\"tags\":\[}
+  tags=${tags%%\]*}
+
+  out=""
+  # Each tag is a "{...}" object; split on the closing brace.
+  IFS='}' read -ra objs <<<"$tags"
+  for o in "${objs[@]}"; do
+    [[ $o == *'"index"'* ]] || continue
+    idx=${o#*\"index\":}; idx=${idx%%,*}
+    if [[ $o == *'"is_urgent":true'* ]]; then
+      out+="<span weight='bold' foreground='#e27878'>$idx</span>  "
+    elif [[ $o == *'"is_active":true'* ]]; then
+      out+="<span weight='bold' underline='single'>$idx</span>  "
+    elif [[ $o == *'"client_count":0'* ]]; then
+      out+="<span alpha='40%'>$idx</span>  "
+    else
+      out+="$idx  "
+    fi
+  done
+  out=${out%  }
+  printf '{"text":"%s"}\n' "$out"
+done

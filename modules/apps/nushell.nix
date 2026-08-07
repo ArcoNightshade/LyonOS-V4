@@ -1,0 +1,33 @@
+{ settings, ... }:
+{
+home-manager.users.${settings.account.name} = {
+  xdg.configFile."nushell/config.nu".text = ''
+    # config.nu
+    #
+    # Installed by:
+    # version = "0.104.0"
+    #
+    # This file is used to override default Nushell settings, define
+    # (or import) custom commands, or run any other startup tasks.
+    # See https://www.nushell.sh/book/configuration.html
+    #
+    # This file is loaded after env.nu and before login.nu
+    #
+    # You can open this file in your default editor using:
+    # config nu
+    #
+    # See `help config nu` for more options
+    #
+    # You can remove these comments if you want or leave
+    # them for future reference.
+    $env.config.buffer_editor = "zeditor"
+    $env.config.show_banner = false
+    $env.PATH = ($env.PATH | append '~/.cargo/env')
+    alias sudo = doas
+    alias nixrebuild = doas nixos-rebuild switch --flake ${settings.flakePath}#workstation
+    alias nhrebuild = nh os switch ${settings.flakePath} -H workstation
+    source ~/.zoxide.nu
+    alias cd = z
+  '';
+  };
+}

@@ -1,0 +1,198 @@
+{ settings, ... }:
+{
+home-manager.users.${settings.account.name} = { config, ... }: {
+  xdg.configFile."foot/foot.ini".text = ''
+    # -*- conf -*-
+
+    # shell=$SHELL (if set, otherwise user's default shell from /etc/passwd)
+    shell=/run/current-system/sw/bin/nu
+    # term=foot (or xterm-256color if built with -Dterminfo=disabled)
+    # login-shell=no
+
+    # app-id=foot
+    # title=foot
+    # locked-title=no
+
+    font=${settings.font.monoName}:size=${toString settings.font.size}
+    # font-bold=<bold variant of regular font>
+    # font-italic=<italic variant of regular font>
+    # font-bold-italic=<bold+italic variant of regular font>
+    # line-height=<font metrics>
+    # letter-spacing=0
+    # horizontal-letter-offset=0
+    # vertical-letter-offset=0
+    # underline-offset=<font metrics>
+    # box-drawings-uses-font-glyphs=no
+    # dpi-aware=auto
+
+    # initial-window-size-pixels=700x500  # Or,
+    # initial-window-size-chars=<COLSxROWS>
+    # initial-window-mode=windowed
+    pad=12x12                             # optionally append 'center'
+    # resize-delay-ms=100
+
+    # bold-text-in-bright=no
+    # word-delimiters=,│`|:"'()[]{}<>
+    # selection-target=primary
+    # workers=<number of logical CPUs>
+
+    [environment]
+    # name=value
+
+    [bell]
+    # urgent=no
+    # notify=no
+    # command=
+    # command-focused=no
+
+    [scrollback]
+    # lines=1000
+    # multiplier=3.0
+    # indicator-position=relative
+    # indicator-format=
+
+    [url]
+     label-letters=sadfjklewcmpgh
+     osc8-underline=url-mode
+     # protocols=http, https, ftp, ftps, file, gemini, gopher
+     # uri-characters=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.,~:;/?#@!$&%*+="'()[]
+
+    [cursor]
+     style=underline
+     # color=<inverse foreground/background>
+     blink=yes
+     beam-thickness=1.5
+     # underline-thickness=<font underline thickness>
+
+    [mouse]
+    # hide-when-typing=no
+    # alternate-scroll-mode=yes
+
+    [colors-dark]
+    alpha=0.4
+    foreground=${settings.colorScheme.palette.base05}
+    background=${settings.colorScheme.palette.base00}
+
+    regular0=${settings.colorScheme.palette.base03}
+    regular1=${settings.colorScheme.palette.base08}
+    regular2=${settings.colorScheme.palette.base0B}
+    regular3=${settings.colorScheme.palette.base0A}
+    regular4=${settings.colorScheme.palette.base0D}
+    regular5=${settings.colorScheme.palette.base0E}
+    regular6=${settings.colorScheme.palette.base0C}
+    regular7=${settings.colorScheme.palette.base06}
+
+    bright0=${settings.colorScheme.palette.base04}
+    bright1=${settings.colorScheme.palette.base08}
+    bright2=${settings.colorScheme.palette.base0B}
+    bright3=${settings.colorScheme.palette.base0A}
+    bright4=${settings.colorScheme.palette.base0D}
+    bright5=${settings.colorScheme.palette.base0E}
+    bright6=${settings.colorScheme.palette.base0C}
+    bright7=${settings.colorScheme.palette.base07}
+
+    ## dimmed colors (see foot.ini(5) man page)
+    # dim0=<not set>
+    # ...
+    # dim7=<not-set>
+
+    ## The remaining 256-color palette
+    # 16 = <256-color palette #16>
+    # ...
+    # 255 = <256-color palette #255>
+
+    ## Misc colors
+    # selection-foreground=<inverse foreground/background>
+    # selection-background=<inverse foreground/background>
+    # jump-labels=<regular0> <regular3>          # black-on-yellow
+    # scrollback-indicator=<regular0> <bright4>  # black-on-bright-blue
+    # search-box-no-match=<regular0> <regular1>  # black-on-red
+    # search-box-match=<regular0> <regular3>     # black-on-yellow
+    # urls=<regular3>
+
+    [csd]
+    # preferred=server
+    size=0
+    # font=<primary font>
+    # color=<foreground color>
+    # hide-when-typing=no
+    # border-width=0
+    # border-color=<csd.color>
+    # button-width=26
+    # button-color=<background color>
+    # button-minimize-color=<regular4>
+    # button-maximize-color=<regular2>
+    # button-close-color=<regular1>
+
+    [key-bindings]
+    # scrollback-up-page=Shift+Page_Up
+    # scrollback-up-half-page=none
+    # scrollback-up-line=none
+    # scrollback-down-page=Shift+Page_Down
+    # scrollback-down-half-page=none
+    # scrollback-down-line=none
+    # clipboard-copy=Control+Shift+c XF86Copy
+    # clipboard-paste=Control+Shift+v XF86Paste
+    # primary-paste=Shift+Insert
+    # search-start=Control+Shift+r
+    # font-increase=Control+plus Control+equal Control+KP_Add
+    # font-decrease=Control+minus Control+KP_Subtract
+    # font-reset=Control+0 Control+KP_0
+    # spawn-terminal=Control+Shift+n
+    # minimize=none
+    # maximize=none
+    # fullscreen=none
+    # pipe-visible=[sh -c "xurls | fuzzel | xargs -r firefox"] none
+    # pipe-scrollback=[sh -c "xurls | fuzzel | xargs -r firefox"] none
+    # pipe-selected=[xargs -r firefox] none
+    # show-urls-launch=Control+Shift+u
+    # show-urls-copy=none
+    # show-urls-persistent=none
+    # prompt-prev=Control+Shift+z
+    # prompt-next=Control+Shift+x
+    # unicode-input=none
+    # noop=none
+
+    [search-bindings]
+    # cancel=Control+g Control+c Escape
+    # commit=Return
+    # find-prev=Control+r
+    # find-next=Control+s
+    # cursor-left=Left Control+b
+    # cursor-left-word=Control+Left Mod1+b
+    # cursor-right=Right Control+f
+    # cursor-right-word=Control+Right Mod1+f
+    # cursor-home=Home Control+a
+    # cursor-end=End Control+e
+    # delete-prev=BackSpace
+    # delete-prev-word=Mod1+BackSpace Control+BackSpace
+    # delete-next=Delete
+    # delete-next-word=Mod1+d Control+Delete
+    # extend-to-word-boundary=Control+w
+    # extend-to-next-whitespace=Control+Shift+w
+    # clipboard-paste=Control+v Control+Shift+v Control+y XF86Paste
+    # primary-paste=Shift+Insert
+    # unicode-input=none
+
+    [url-bindings]
+    # cancel=Control+g Control+c Control+d Escape
+    # toggle-url-visible=t
+
+    [text-bindings]
+    # \x03=Mod4+c  # Map Super+c -> Ctrl+c
+
+    [mouse-bindings]
+    # selection-override-modifiers=Shift
+    # primary-paste=BTN_MIDDLE
+    # select-begin=BTN_LEFT
+    # select-begin-block=Control+BTN_LEFT
+    # select-extend=BTN_RIGHT
+    # select-extend-character-wise=Control+BTN_RIGHT
+    # select-word=BTN_LEFT-2
+    # select-word-whitespace=Control+BTN_LEFT-2
+    # select-row=BTN_LEFT-3
+
+    # vim: ft=dosini
+  '';
+  };
+}

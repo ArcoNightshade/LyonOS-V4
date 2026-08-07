@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Emits a local filesystem path to a circular-masked version of the current
+# player's album art, for the waybar `image` module. GTK's GtkImage doesn't
+# clip its pixbuf content to CSS border-radius, so the circle has to be baked
+# into the image itself with ImageMagick. Both the raw download and the
+# circular render are cached under $XDG_CACHE_HOME so we don't redownload or
+# reprocess every poll. No player / no art -> empty output (image hides).
+
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-mpris"
+mkdir -p "$cache_dir"
+
+size=32
+
+url=$(playerctl metadata mpris:artUrl 2>/dev/null)
+[ -z "$url" ] && exit 0
+
+case "$url" in
+  file://*)
+    raw=${url#file://}
+    key=$(printf '%s' "$raw" | md5sum | cut -d' ' -f1)
+    ;;
+  http://*|https://*)
+    key=$(printf '%s' "$url" | md5sum | cut -d' ' -f1)
+    raw="$cache_dir/$key"
+    [ -f "$raw" ] || curl -sfL "$url" -o "$raw" || exit 0
+    ;;
+  *)
+    exit 0
+    ;;
+esac
+
+circle="$cache_dir/$key-circle-$size.png"
+if [ ! -f "$circle" ]; then
+  magick "$raw" -resize "${size}x${size}^" -gravity center -extent "${size}x${size}" \
+    \( -size "${size}x${size}" xc:none -fill white -draw "circle $((size / 2)),$((size / 2)) $((size / 2)),0" \) \
+    -alpha off -compose CopyOpacity -composite "$circle" 2>/dev/null || exit 0
+fi
+
+echo "$circle"
