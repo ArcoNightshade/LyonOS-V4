@@ -23,8 +23,7 @@ home-manager.users.${settings.account.name} = {
     $env.config.buffer_editor = "zeditor"
     $env.config.show_banner = false
     $env.PATH = ($env.PATH | append '~/.cargo/env')
-    alias sudo = doas
-    alias nixrebuild = doas nixos-rebuild switch --flake ${settings.flakePath}#workstation
+    alias nixrebuild = sudo nixos-rebuild switch --flake ${settings.flakePath}#workstation
     alias nhrebuild = nh os switch ${settings.flakePath} -H workstation
     source ~/.zoxide.nu
     alias cd = z

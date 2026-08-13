@@ -314,9 +314,18 @@ in
         # fall back to a light theme unless this is set explicitly. Also propagate
         # it to systemd --user/dbus so app launchers and dbus-activated services see it.
         export QT_QPA_PLATFORMTHEME=kde
-        systemctl --user import-environment QT_QPA_PLATFORMTHEME 2>/dev/null
+
+        # systemd --user (and anything it dbus-activates, like
+        # xdg-desktop-portal-wlr) is a separate process tree from mango and
+        # does not inherit its environment. Without WAYLAND_DISPLAY here, the
+        # portal service can't reach the compositor socket at all, so the
+        # ScreenCast portal fails silently -- this is why screen sharing in
+        # apps like Discord/Vesktop doesn't work. XDG_CURRENT_DESKTOP/
+        # XDG_SESSION_TYPE are propagated too since portals use them for
+        # per-desktop config lookup.
+        systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DISPLAY 2>/dev/null
         command -v dbus-update-activation-environment >/dev/null && \
-          dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME 2>/dev/null
+          dbus-update-activation-environment --systemd QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DISPLAY 2>/dev/null
 
         ${pkgs.waybar}/bin/waybar -c ~/.config/waybar/config-generic &
 

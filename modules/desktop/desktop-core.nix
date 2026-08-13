@@ -95,10 +95,23 @@ in
 
   xdg.portal = {
     enable = true;
+    # wlr.enable pulls in xdg-desktop-portal-wlr, the ScreenCast backend
+    # for wlroots compositors (mango included). Without it, screen sharing
+    # in apps like Discord/Vesktop has no working portal to talk to --
+    # xdg-desktop-portal-gtk/-gnome only implement ScreenCast when an
+    # actual GNOME Shell is running the session.
+    wlr.enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-gnome
     ];
+    # xdg-desktop-portal >=1.17 requires an explicit routing table instead
+    # of falling back to lexicographic order (which would pick gtk, which
+    # can't do ScreenCast, and screensharing would silently fail).
+    config.common = {
+      default = [ "gtk" ];
+      "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+    };
   };
 
   # Audio

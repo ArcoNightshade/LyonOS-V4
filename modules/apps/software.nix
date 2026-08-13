@@ -8,6 +8,6 @@
     tonearm    # GTK client for TIDAL
 
     # Internet tools
-    firefox vesktop
+    firefox vesktop signal-desktop
   ];
 }

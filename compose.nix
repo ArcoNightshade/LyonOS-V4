@@ -6,6 +6,8 @@
   environment.sessionVariables.NIX_AUTO_RUN = "1";
   environment.sessionVariables.NIXPKGS_ALLOW_UNFREE = "1";
 
+  programs.dconf.enable = true;
+
   /* Nix settings */
   nix.package = pkgs.lix;
   nix.settings.sandbox = true;
@@ -63,10 +65,14 @@ nix.settings.warn-dirty = false;
   };
 
   /* Privilege escalation: doas instead of sudo */
-  security.sudo.enable = false;
-  security.doas.enable = true;
-  /* Upstream opendoas calls pam_authenticate once and aborts on the first
-     wrong password. Patch it to retry up to 3 times, like sudo does. */
+  security.sudo.enable = true;
+  /*
+  security.doas = {
+    enable = true;
+    symlinkToSudo = true;
+  };	
+  # Upstream opendoas calls pam_authenticate once and aborts on the first
+  #  wrong password. Patch it to retry up to 3 times, like sudo does.
   security.doas.package = pkgs.doas.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [ ./modules/apps/doas-3-tries.patch ];
   });
@@ -74,7 +80,8 @@ nix.settings.warn-dirty = false;
     users = [ "${settings.account.name}" ];
     keepEnv = true;
     persist = true;   # cache auth per-session like sudo timestamp
-  }];
+  }]; 
+  */
 
   /* Enabling graphical stuff for steam */
   hardware.graphics = {
@@ -108,13 +115,12 @@ nix.settings.warn-dirty = false;
 
   powerManagement.cpuFreqGovernor = "powersave"; # Change this depending on your needs
   services.tlp.enable = false;
+  virtualisation.waydroid.enable = true;
 
   /* Network */
   networking.firewall.enable = true;
-  networking.wireless.enable = lib.mkForce false;
   networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
-  networking.wireless.iwd.enable = true;
+  networking.networkmanager.wifi.backend = "wpa_supplicant";
 
   /* iwd and NetworkManager desync after suspend/hibernate, leaving wifi in a
      "no secrets provided" state — restart both on resume to re-sync them */

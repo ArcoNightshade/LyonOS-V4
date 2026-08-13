@@ -4,6 +4,7 @@
     ../../modules/apps/pc-apps.nix # Installing all of the graphical software (PC variant)
     ../../modules/experimental/cutting-edge.nix # Cutting edge stuff here (Nushell, uutils, and zoxide)
     ../../modules/apps/nushell.nix # Configuring nushell
+    ../../modules/apps/atuin.nix # Atuin shell history
     ../../modules/apps/zed-desktop.nix # Installing and configuring zed editor
     ../../modules/apps/fastfetch.nix # Defining the fastfetch configuration
     ../../modules/commands/software.nix # Installing all of the non-graphical software

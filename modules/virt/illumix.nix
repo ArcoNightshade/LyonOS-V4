@@ -69,6 +69,7 @@ let
         "-rtc" "base=utc,driftfix=slew"
         "-global" "kvm-pit.lost_tick_policy=discard"
         "-monitor" "unix:$run_dir/$name.monitor.sock,server,nowait"
+	"-vga" "none"
         ${lib.concatMapStringsSep "\n        " lib.escapeShellArg cfg.extraQemuArgs}
       )
 

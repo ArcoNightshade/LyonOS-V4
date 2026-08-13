@@ -1,13 +1,15 @@
-{ pkgs, settings, ... }:
+{ pkgs, settings, lib, ... }:
 {
   imports = [
     # Same desktop stack as workstation (see profile/workstation/configuration.nix)
     ../../modules/desktop/mango.nix # mango compositor (shares desktop-core.nix)
     ../../modules/apps/software.nix # Installing all of the graphical software
     ../../modules/apps/steam.nix # Installing steam
+    ../../modules/apps/supertuxkart.nix # Installing SuperTuxKart
     ../../modules/apps/protonvpn.nix # Proton VPN GTK client (via NetworkManager)
     ../../modules/experimental/cutting-edge.nix # Cutting edge stuff here (Nushell, uutils, and zoxide)
     ../../modules/apps/nushell.nix # Configuring nushell
+    ../../modules/apps/atuin.nix # Atuin shell history
     ../../modules/apps/zed.nix # Installing and configuring zed editor
     ../../modules/apps/btop.nix # btop with Catppuccin theme
     ../../modules/apps/mako.nix # mako notifications with Catppuccin theme
@@ -32,6 +34,9 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
+    
+  programs.dconf.enable = true;
+  systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
   boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # Magic xanmod (Found better performance with it)
 

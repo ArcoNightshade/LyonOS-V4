@@ -4,6 +4,7 @@
     ../../modules/desktop/mango.nix # mango compositor (shares desktop-core.nix)
     ../../modules/apps/software.nix # Installing all of the graphical software
     ../../modules/apps/steam.nix # Installing steam
+    ../../modules/apps/supertuxkart.nix # Installing SuperTuxKart
     ../../modules/apps/protonvpn.nix # Proton VPN GTK client (via NetworkManager)
     ../../modules/experimental/cutting-edge.nix # Cutting edge stuff here (Nushell, uutils, and zoxide)
     ../../modules/apps/nushell.nix # Configuring nushell

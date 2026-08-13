@@ -29,7 +29,7 @@ in
     systemd.network.networks."30-${cfg.tapInterface}" = {
       matchConfig.Name = cfg.tapInterface;
       address = [ "10.100.0.1/24" ];
-      networkConfig.RequiredForOnline = false;
+      linkConfig.RequiredForOnline = false;
     };
 
     networking.networkmanager.unmanaged = [ "interface-name:${cfg.tapInterface}" ];
